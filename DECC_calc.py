@@ -15,9 +15,9 @@ round_up_type = st.sidebar.radio(
     ["Nearest $1", "Nearest $5", "Nearest $10"]
 )
 
-# User sets their savings goal
-savings_goal = st.sidebar.number_input(
-    "🎯 Enter Your Savings Goal ($)", min_value=100, value=10000, step=100
+# User sets their monthly savings goal
+monthly_savings_goal = st.sidebar.number_input(
+    "🎯 Set Your Monthly Savings Goal ($)", min_value=10, value=500, step=10
 )
 
 # User enters estimated monthly transactions
@@ -84,9 +84,16 @@ st.plotly_chart(fig, use_container_width=True)
 
 # -------------------- Summary Insights -------------------- #
 st.write("### 📌 Key Takeaways")
-st.info(f"📈 With a **{round_up_type}** strategy, you will save **${monthly_savings:.2f} per month**.")
+
+# Display insights based on monthly goal progress
+if monthly_savings >= monthly_savings_goal:
+    st.success(f"🎯 You're on track! Your **estimated monthly savings** of **${monthly_savings:.2f}** meets or exceeds your goal of **${monthly_savings_goal:.2f}**.")
+else:
+    shortfall = monthly_savings_goal - monthly_savings
+    st.warning(f"⚠️ You need to save **${shortfall:.2f}** more per month to meet your goal of **${monthly_savings_goal:.2f}**.")
+
+# Long-term savings projection
 st.info(f"💰 In **{years[-1]} years**, your savings will grow to **${savings_forecast[-1]:,.2f}** with a **{hysa_apy*100:.2f}% APY HYSA**.")
-st.info(f"🎯 Your goal is **${savings_goal:,.2f}**, and you're projected to reach **{(savings_forecast[-1] / savings_goal) * 100:.1f}%** of it.")
 
 # -------------------- Footer -------------------- #
 st.markdown("---")
